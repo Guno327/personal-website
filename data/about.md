@@ -1,17 +1,24 @@
 # About
 
-My name is Gunnar and I am a senior studying Computer Science at the University
-of Utah. I have always had a passion for computers that led me to persue an
-education in that field. I enjoy playing video games and messing around with
-Linux in my free time.
+My name is Gunnar and I am a recent graduate from the University of Utah with a
+BCS in Computer Science. I am a backend engineer with a focus on systems
+programming. I have an appreciation for the theoritical side of computing thanks
+to my time teaching in theory focused Computer Sciences courses during my
+undergraduate career.
+
+Despite my focus being systems programming, I have a healthy breadth of
+experience in many disciplines. Thanks to my focus on computational theory I am
+able to get up to speed with new frameworks/languages quickly.
 
 ## Education
 
 ### University of Utah
 
-- Plan to graduate Spring 2025
-- Studying Computer Science
-- GPA: 3.84
+- Graduated with BCS in CS
+- Fall 2021 - Spring 2025
+- GPA: 3.85, Dean's List
+- Track certificates in Computer Systems/Security and Software Development
+- Member UtahSec
 
 ## Work Experience
 

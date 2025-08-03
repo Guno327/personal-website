@@ -27,7 +27,7 @@ type Page struct {
 
 func mdToHTML(md []byte) []byte {
 	// create markdown parser with extensions
-	extensions := parser.CommonExtensions | parser.AutoHeadingIDs | parser.NoEmptyLineBeforeBlock
+	extensions := parser.CommonExtensions | parser.AutoHeadingIDs | parser.NoEmptyLineBeforeBlock | parser.HardLineBreak
 	p := parser.NewWithExtensions(extensions)
 	doc := p.Parse(md)
 

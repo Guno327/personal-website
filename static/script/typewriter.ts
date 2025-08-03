@@ -20,33 +20,31 @@ const typewrite = async (parent: Element | null, element: Element | null) => {
     for (let i = 0; i < children.length; i++) {
       await typewrite(emptyElement, children[i]);
     }
-  } else if (element.children.length == 0) {
-    if (element.textContent == null) {
-      console.log("TYPEWRITER: appending non-typed element of type %s", tag);
-
-      parent.appendChild(element);
-      return;
-    }
-
-    console.log(
-      "TYPEWRITE: typing element of type %s with text '%s'",
-      tag,
-      element.textContent,
-    );
-
-    parent.appendChild(emptyElement);
-    emptyElement.textContent = "";
-    for (let i = 0; i < element.textContent.length; i++) {
-      emptyElement.textContent += element.textContent[i];
-      await sleep(typingSpeed);
-    }
   } else {
-    console.log("TYPEWRITE: traversing nested element of type %s", tag);
+    if (element.textContent == null || tag == "UL") {
+      console.log("TYPEWRITER: appending non-typed element of type %s", tag);
+      parent.appendChild(element);
+    } else {
+      console.log(
+        "TYPEWRITE: typing element of type %s with text '%s'",
+        tag,
+        element.textContent,
+      );
 
-    parent.append(emptyElement);
-    const children = Array.from(element.children);
-    for (let i = 0; i < children.length; i++) {
-      await typewrite(emptyElement, children[i]);
+      parent.appendChild(emptyElement);
+      emptyElement.textContent = "";
+      for (let i = 0; i < element.textContent.length; i++) {
+        emptyElement.textContent += element.textContent[i];
+        await sleep(typingSpeed);
+      }
+    }
+
+    if (element.children.length != 0) {
+      console.log("TYPEWRITE: traversing nested element of type %s", tag);
+      const children = Array.from(element.children);
+      for (let i = 0; i < children.length; i++) {
+        await typewrite(emptyElement, children[i]);
+      }
     }
   }
 };

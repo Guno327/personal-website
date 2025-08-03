@@ -66,31 +66,29 @@ var typewrite = function (parent, element) { return __awaiter(_this, void 0, voi
                 return [3 /*break*/, 1];
             case 4: return [3 /*break*/, 14];
             case 5:
-                if (!(element.children.length == 0)) return [3 /*break*/, 10];
-                if (element.textContent == null) {
-                    console.log("TYPEWRITER: appending non-typed element of type %s", tag);
-                    parent.appendChild(element);
-                    return [2 /*return*/];
-                }
+                if (!(element.textContent == null || tag == "UL")) return [3 /*break*/, 6];
+                console.log("TYPEWRITER: appending non-typed element of type %s", tag);
+                parent.appendChild(element);
+                return [3 /*break*/, 10];
+            case 6:
                 console.log("TYPEWRITE: typing element of type %s with text '%s'", tag, element.textContent);
                 parent.appendChild(emptyElement);
                 emptyElement.textContent = "";
                 i = 0;
-                _a.label = 6;
-            case 6:
-                if (!(i < element.textContent.length)) return [3 /*break*/, 9];
+                _a.label = 7;
+            case 7:
+                if (!(i < element.textContent.length)) return [3 /*break*/, 10];
                 emptyElement.textContent += element.textContent[i];
                 return [4 /*yield*/, sleep(typingSpeed)];
-            case 7:
-                _a.sent();
-                _a.label = 8;
             case 8:
+                _a.sent();
+                _a.label = 9;
+            case 9:
                 i++;
-                return [3 /*break*/, 6];
-            case 9: return [3 /*break*/, 14];
+                return [3 /*break*/, 7];
             case 10:
+                if (!(element.children.length != 0)) return [3 /*break*/, 14];
                 console.log("TYPEWRITE: traversing nested element of type %s", tag);
-                parent.append(emptyElement);
                 children = Array.from(element.children);
                 i = 0;
                 _a.label = 11;

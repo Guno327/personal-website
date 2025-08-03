@@ -63,6 +63,7 @@ nav {
   font-family: "Fira Mono", monospace;
   letter-spacing: 1px;
   overflow: visible;
+  z-index: 1;
 }
 
 nav ul {

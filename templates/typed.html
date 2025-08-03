@@ -6,6 +6,7 @@
     <title>{{.Title}}</title>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Mono&display=swap" rel="stylesheet" />
   <link href="/static/style/main.css" rel="stylesheet" />
+  <script src="/static/script/typewriter.js"></script>
   <nav>
     <ul>
       <li><a href="/" class="glitch" data-text="About Me">About Me</a></li>
@@ -16,7 +17,7 @@
   </nav>
 </head>
 <body>
-<main>{{.Body}}</main>
+  <main class="typewriter">{{.Body}}</main>
 </body>
 </html>
 

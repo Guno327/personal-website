@@ -14,10 +14,11 @@ import (
 	"strings"
 )
 
-var templates = template.Must(template.ParseFiles("templates/base.html"))
+var templates = template.Must(template.ParseFiles("templates/base.html", "templates/typed.html"))
 
 var validPage = regexp.MustCompile("^/(class|project)/([a-zA-Z0-9]+)/$")
 var validStaticPage = regexp.MustCompile("^/(about|contact)/$")
+var titleFromPath = regexp.MustCompile("^([a-zA-Z0-9]+).([a-zA-Z]+)$")
 
 type Page struct {
 	Title string
@@ -83,7 +84,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := templates.ExecuteTemplate(w, "base.html", p)
+	err := templates.ExecuteTemplate(w, "typed.html", p)
 	if err != nil {
 		log.Printf("404: Error executing template in page (%s)\n", err.Error())
 		http.NotFound(w, r)
@@ -106,8 +107,9 @@ func classesHandler(w http.ResponseWriter, r *http.Request) {
 
 	body := "<ul>\n"
 	for _, class := range classes {
-		title := class.Name()
-		body += fmt.Sprintf("<li><a href=\"/class/%s\"></a>%s</li>\n", title, strings.ToUpper(strings.ReplaceAll(title, "_", " ")))
+		m := titleFromPath.FindStringSubmatch(class.Name())
+		title := m[1]
+		body += fmt.Sprintf("<li><a href=\"/class/%s/\">%s</a></li>\n", title, strings.ToUpper(title))
 	}
 	body += "</ul>\n"
 	p := &Page{Title: "CLASSES", Body: template.HTML(body)}
@@ -134,8 +136,9 @@ func projectsHandler(w http.ResponseWriter, r *http.Request) {
 
 	body := "<ul>\n"
 	for _, project := range projects {
-		title := project.Name()
-		body += fmt.Sprintf("<li><a href=\"/project/%s\"></a>%s</li>\n", title, strings.ToUpper(strings.ReplaceAll(title, "_", " ")))
+		m := titleFromPath.FindStringSubmatch(project.Name())
+		title := m[1]
+		body += fmt.Sprintf("<li><a href=\"/project/%s/\">%s</a></li>\n", title, strings.ToUpper(strings.ReplaceAll(title, "_", " ")))
 	}
 	body += "</ul>\n"
 	p := &Page{Title: "PROJECTS", Body: template.HTML(body)}

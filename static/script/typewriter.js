@@ -41,69 +41,77 @@ var sleep = function (ms) { return new Promise(function (r) { return setTimeout(
 // Main recursive work function
 var typewrite = function (parent, element) { return __awaiter(_this, void 0, void 0, function () {
     var tag, emptyElement, children, i, i, children, i;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
                 if (element == null) {
                     return [2 /*return*/];
                 }
                 tag = element.tagName;
                 emptyElement = document.createElement(tag);
+                if (tag == "A") {
+                    emptyElement.setAttribute("href", (_a = element.getAttribute("href")) !== null && _a !== void 0 ? _a : "");
+                }
                 if (!(parent == null)) return [3 /*break*/, 5];
                 console.log("TYPEWRITER: root element of type %s", tag);
                 element.replaceWith(emptyElement);
+                sleep(100);
                 children = Array.from(element.children);
                 i = 0;
-                _a.label = 1;
+                _b.label = 1;
             case 1:
                 if (!(i < children.length)) return [3 /*break*/, 4];
                 return [4 /*yield*/, typewrite(emptyElement, children[i])];
             case 2:
-                _a.sent();
-                _a.label = 3;
+                _b.sent();
+                _b.label = 3;
             case 3:
                 i++;
                 return [3 /*break*/, 1];
-            case 4: return [3 /*break*/, 14];
+            case 4: return [3 /*break*/, 15];
             case 5:
-                if (!(element.children.length == 0)) return [3 /*break*/, 10];
-                if (element.textContent == null) {
-                    console.log("TYPEWRITER: appending non-typed element of type %s", tag);
-                    parent.appendChild(element);
-                    return [2 /*return*/];
-                }
+                if (!(element.textContent == null)) return [3 /*break*/, 6];
+                console.log("TYPEWRITER: appending non-typed element of type %s", tag);
+                parent.appendChild(element);
+                return [3 /*break*/, 11];
+            case 6:
+                if (!(tag == "UL" || (tag == "LI" && element.children.length != 0))) return [3 /*break*/, 7];
+                console.log("TYPEWRITE: nested element with text");
+                parent.appendChild(emptyElement);
+                return [3 /*break*/, 11];
+            case 7:
                 console.log("TYPEWRITE: typing element of type %s with text '%s'", tag, element.textContent);
                 parent.appendChild(emptyElement);
                 emptyElement.textContent = "";
                 i = 0;
-                _a.label = 6;
-            case 6:
-                if (!(i < element.textContent.length)) return [3 /*break*/, 9];
+                _b.label = 8;
+            case 8:
+                if (!(i < element.textContent.length)) return [3 /*break*/, 11];
                 emptyElement.textContent += element.textContent[i];
                 return [4 /*yield*/, sleep(typingSpeed)];
-            case 7:
-                _a.sent();
-                _a.label = 8;
-            case 8:
-                i++;
-                return [3 /*break*/, 6];
-            case 9: return [3 /*break*/, 14];
+            case 9:
+                _b.sent();
+                _b.label = 10;
             case 10:
+                i++;
+                return [3 /*break*/, 8];
+            case 11:
+                if (!(element.children.length != 0)) return [3 /*break*/, 15];
                 console.log("TYPEWRITE: traversing nested element of type %s", tag);
-                parent.append(emptyElement);
                 children = Array.from(element.children);
                 i = 0;
-                _a.label = 11;
-            case 11:
-                if (!(i < children.length)) return [3 /*break*/, 14];
-                return [4 /*yield*/, typewrite(emptyElement, children[i])];
+                _b.label = 12;
             case 12:
-                _a.sent();
-                _a.label = 13;
+                if (!(i < children.length)) return [3 /*break*/, 15];
+                return [4 /*yield*/, typewrite(emptyElement, children[i])];
             case 13:
+                _b.sent();
+                _b.label = 14;
+            case 14:
                 i++;
-                return [3 /*break*/, 11];
-            case 14: return [2 /*return*/];
+                return [3 /*break*/, 12];
+            case 15: return [2 /*return*/];
         }
     });
 }); };

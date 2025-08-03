@@ -14,10 +14,11 @@ import (
 	"strings"
 )
 
-var templates = template.Must(template.ParseFiles("templates/base.html"))
+var templates = template.Must(template.ParseFiles("templates/base.html", "templates/typed.html"))
 
 var validPage = regexp.MustCompile("^/(class|project)/([a-zA-Z0-9]+)/$")
 var validStaticPage = regexp.MustCompile("^/(about|contact)/$")
+var titleFromPath = regexp.MustCompile("^([a-zA-Z0-9]+).([a-zA-Z]+)$")
 
 type Page struct {
 	Title string
@@ -55,7 +56,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
 		m = validPage.FindStringSubmatch(r.URL.Path)
 		if m == nil {
 			log.Printf("404: No substring match for page (%s)\n", r.URL.Path)
-			http.NotFound(w, r)
+			http.ServeFile(w, r, "static/pages/404.html")
 			return
 		}
 	}
@@ -73,27 +74,27 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
 		p = loadPage("about")
 	default:
 		log.Printf("404: substring match unexpected in page (%s)\n", m[1])
-		http.NotFound(w, r)
+		http.ServeFile(w, r, "static/pages/404.html")
 		return
 	}
 
 	if p == nil {
 		log.Print("404: Page not found")
-		http.NotFound(w, r)
+		http.ServeFile(w, r, "static/pages/404.html")
 		return
 	}
 
-	err := templates.ExecuteTemplate(w, "base.html", p)
+	err := templates.ExecuteTemplate(w, "typed.html", p)
 	if err != nil {
 		log.Printf("404: Error executing template in page (%s)\n", err.Error())
-		http.NotFound(w, r)
+		http.ServeFile(w, r, "static/pages/404.html")
 	}
 }
 
 func classesHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/classes/" {
 		log.Printf("404: Path not found (%s)", r.URL.Path)
-		http.NotFound(w, r)
+		http.ServeFile(w, r, "static/pages/404.html")
 		return
 	}
 
@@ -104,24 +105,33 @@ func classesHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if len(classes) == 0 {
+		err = templates.ExecuteTemplate(w, "typed.html", &Page{Title: "CLASSES", Body: template.HTML("<p>Coming soon...<p>")})
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		return
+	}
+
 	body := "<ul>\n"
 	for _, class := range classes {
-		title := class.Name()
-		body += fmt.Sprintf("<li><a href=\"/class/%s\"></a>%s</li>\n", title, strings.ToUpper(strings.ReplaceAll(title, "_", " ")))
+		m := titleFromPath.FindStringSubmatch(class.Name())
+		title := m[1]
+		body += fmt.Sprintf("<li><a href=\"/class/%s/\">%s</a></li>\n", title, strings.ToUpper(title))
 	}
 	body += "</ul>\n"
 	p := &Page{Title: "CLASSES", Body: template.HTML(body)}
 
-	err = templates.ExecuteTemplate(w, "base.html", p)
+	err = templates.ExecuteTemplate(w, "typed.html", p)
 	if err != nil {
-		http.NotFound(w, r)
+		http.ServeFile(w, r, "static/pages/404.html")
 	}
 }
 
 func projectsHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/projects/" {
 		log.Printf("404: Path not found (%s)", r.URL.Path)
-		http.NotFound(w, r)
+		http.ServeFile(w, r, "static/pages/404.html")
 		return
 	}
 
@@ -132,17 +142,26 @@ func projectsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if len(projects) == 0 {
+		err = templates.ExecuteTemplate(w, "typed.html", &Page{Title: "PROJECTS", Body: template.HTML("<p>Coming soon...<p>")})
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		return
+	}
+
 	body := "<ul>\n"
 	for _, project := range projects {
-		title := project.Name()
-		body += fmt.Sprintf("<li><a href=\"/project/%s\"></a>%s</li>\n", title, strings.ToUpper(strings.ReplaceAll(title, "_", " ")))
+		m := titleFromPath.FindStringSubmatch(project.Name())
+		title := m[1]
+		body += fmt.Sprintf("<li><a href=\"/project/%s/\">%s</a></li>\n", title, strings.ToUpper(strings.ReplaceAll(title, "_", " ")))
 	}
 	body += "</ul>\n"
 	p := &Page{Title: "PROJECTS", Body: template.HTML(body)}
 
-	err = templates.ExecuteTemplate(w, "base.html", p)
+	err = templates.ExecuteTemplate(w, "typed.html", p)
 	if err != nil {
-		http.NotFound(w, r)
+		http.ServeFile(w, r, "static/pages/404.html")
 	}
 }
 

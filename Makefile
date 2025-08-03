@@ -1,3 +1,5 @@
+build: website static/script/typewriter.js
+
 run: website static/script/typewriter.js
 	sudo ./website
 

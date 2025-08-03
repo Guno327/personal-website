@@ -56,7 +56,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
 		m = validPage.FindStringSubmatch(r.URL.Path)
 		if m == nil {
 			log.Printf("404: No substring match for page (%s)\n", r.URL.Path)
-			http.NotFound(w, r)
+			http.ServeFile(w, r, "static/pages/404.html")
 			return
 		}
 	}
@@ -74,27 +74,27 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
 		p = loadPage("about")
 	default:
 		log.Printf("404: substring match unexpected in page (%s)\n", m[1])
-		http.NotFound(w, r)
+		http.ServeFile(w, r, "static/pages/404.html")
 		return
 	}
 
 	if p == nil {
 		log.Print("404: Page not found")
-		http.NotFound(w, r)
+		http.ServeFile(w, r, "static/pages/404.html")
 		return
 	}
 
 	err := templates.ExecuteTemplate(w, "typed.html", p)
 	if err != nil {
 		log.Printf("404: Error executing template in page (%s)\n", err.Error())
-		http.NotFound(w, r)
+		http.ServeFile(w, r, "static/pages/404.html")
 	}
 }
 
 func classesHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/classes/" {
 		log.Printf("404: Path not found (%s)", r.URL.Path)
-		http.NotFound(w, r)
+		http.ServeFile(w, r, "static/pages/404.html")
 		return
 	}
 
@@ -102,6 +102,14 @@ func classesHandler(w http.ResponseWriter, r *http.Request) {
 	classes, err := os.ReadDir("data/classes")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if len(classes) == 0 {
+		err = templates.ExecuteTemplate(w, "typed.html", &Page{Title: "CLASSES", Body: template.HTML("<p>Coming soon...<p>")})
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
 		return
 	}
 
@@ -114,16 +122,16 @@ func classesHandler(w http.ResponseWriter, r *http.Request) {
 	body += "</ul>\n"
 	p := &Page{Title: "CLASSES", Body: template.HTML(body)}
 
-	err = templates.ExecuteTemplate(w, "base.html", p)
+	err = templates.ExecuteTemplate(w, "typed.html", p)
 	if err != nil {
-		http.NotFound(w, r)
+		http.ServeFile(w, r, "static/pages/404.html")
 	}
 }
 
 func projectsHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/projects/" {
 		log.Printf("404: Path not found (%s)", r.URL.Path)
-		http.NotFound(w, r)
+		http.ServeFile(w, r, "static/pages/404.html")
 		return
 	}
 
@@ -131,6 +139,14 @@ func projectsHandler(w http.ResponseWriter, r *http.Request) {
 	projects, err := os.ReadDir("data/projects")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if len(projects) == 0 {
+		err = templates.ExecuteTemplate(w, "typed.html", &Page{Title: "PROJECTS", Body: template.HTML("<p>Coming soon...<p>")})
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
 		return
 	}
 
@@ -143,9 +159,9 @@ func projectsHandler(w http.ResponseWriter, r *http.Request) {
 	body += "</ul>\n"
 	p := &Page{Title: "PROJECTS", Body: template.HTML(body)}
 
-	err = templates.ExecuteTemplate(w, "base.html", p)
+	err = templates.ExecuteTemplate(w, "typed.html", p)
 	if err != nil {
-		http.NotFound(w, r)
+		http.ServeFile(w, r, "static/pages/404.html")
 	}
 }
 

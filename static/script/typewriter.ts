@@ -12,18 +12,26 @@ const typewrite = async (parent: Element | null, element: Element | null) => {
   const tag = element.tagName;
   const emptyElement = document.createElement(tag);
 
+  if (tag == "A") {
+    emptyElement.setAttribute("href", element.getAttribute("href") ?? "");
+  }
+
   if (parent == null) {
     console.log("TYPEWRITER: root element of type %s", tag);
 
     element.replaceWith(emptyElement);
+    sleep(100);
     const children = Array.from(element.children);
     for (let i = 0; i < children.length; i++) {
       await typewrite(emptyElement, children[i]);
     }
   } else {
-    if (element.textContent == null || tag == "UL") {
+    if (element.textContent == null) {
       console.log("TYPEWRITER: appending non-typed element of type %s", tag);
       parent.appendChild(element);
+    } else if (tag == "UL" || (tag == "LI" && element.children.length != 0)) {
+      console.log("TYPEWRITE: nested element with text");
+      parent.appendChild(emptyElement);
     } else {
       console.log(
         "TYPEWRITE: typing element of type %s with text '%s'",

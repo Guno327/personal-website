@@ -2,7 +2,7 @@
 
 My name is Gunnar and I am a recent graduate from the University of Utah with a
 BCS in Computer Science. I am a backend engineer with a focus on systems
-programming. I have an appreciation for the theoritical side of computing thanks
+programming. I have an appreciation for the theoretical side of computing thanks
 to my time teaching in theory focused Computer Sciences courses during my
 undergraduate career.
 
@@ -24,10 +24,10 @@ able to get up to speed with new frameworks/languages quickly.
 
 ### University of Utah: Teaching Assistant
 
-- Employeed **Fall 2023 semester - Current**
+- Employed **Fall 2023 semester - Current**
 - Held office hours weekly
 - Assisted students with course work
-- Led a weekly discussion section to supplmenet the Professors lectures
+- Led a weekly discussion section to supplement the Professors lectures
 - Created course material as part of the instructional team
 - Graded and evaluated student work under prompt deadlines
 - Assisted in CS2100 for 2 semesters and CS3100 for one semester

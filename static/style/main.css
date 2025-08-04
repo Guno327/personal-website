@@ -79,7 +79,7 @@ nav a {
   position: relative;
   display: inline-block;
   padding: 0 4px;
-  text-decoration: none;
+  text-decoration: underline;
   overflow: visible;
 }
 nav a:hover {
@@ -201,11 +201,16 @@ a {
   margin-bottom: 0;
 }
 
+a {
+  text-decoration: underline;
+}
+
 main a:hover {
   color: #c8facc;
 }
 
 code {
-  color: var(--text);
-  background-color: var(--bg);
+  color: var(--fg);
+  background-color: var(--text);
+  font-style: italic;
 }

@@ -1,63 +1,43 @@
-const typingSpeed = 5; // ms per character
+function typeElement(
+  source: HTMLElement,
+  target: HTMLElement,
+  delay: number,
+): void {
+  const cloneAndType = async (
+    srcNode: Node,
+    parent: HTMLElement,
+  ): Promise<void> => {
+    if (srcNode.nodeType === Node.TEXT_NODE) {
+      const text = (srcNode as Text).textContent || "";
+      for (let char of text) {
+        parent.appendChild(document.createTextNode(char));
+        await new Promise((resolve) => setTimeout(resolve, delay));
+      }
+    } else if (srcNode.nodeType === Node.ELEMENT_NODE) {
+      const srcElem = srcNode as HTMLElement;
+      const newElem = document.createElement(srcElem.tagName.toLowerCase());
 
-// Sleep function
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+      // Copy all attributes
+      for (let attr of Array.from(srcElem.attributes)) {
+        newElem.setAttribute(attr.name, attr.value);
+      }
 
-// Main recursive work function
-const typewrite = async (parent: Element | null, element: Element | null) => {
-  if (element == null) {
-    return;
-  }
+      parent.appendChild(newElem);
 
-  const tag = element.tagName;
-  const emptyElement = document.createElement(tag);
-
-  if (tag == "A") {
-    emptyElement.setAttribute("href", element.getAttribute("href") ?? "");
-  }
-
-  if (parent == null) {
-    console.log("TYPEWRITER: root element of type %s", tag);
-
-    element.replaceWith(emptyElement);
-    sleep(100);
-    const children = Array.from(element.children);
-    for (let i = 0; i < children.length; i++) {
-      await typewrite(emptyElement, children[i]);
-    }
-  } else {
-    if (element.textContent == null) {
-      console.log("TYPEWRITER: appending non-typed element of type %s", tag);
-      parent.appendChild(element);
-    } else if (tag == "UL" || (tag == "LI" && element.children.length != 0)) {
-      console.log("TYPEWRITE: nested element with text");
-      parent.appendChild(emptyElement);
-    } else {
-      console.log(
-        "TYPEWRITE: typing element of type %s with text '%s'",
-        tag,
-        element.textContent,
-      );
-
-      parent.appendChild(emptyElement);
-      emptyElement.textContent = "";
-      for (let i = 0; i < element.textContent.length; i++) {
-        emptyElement.textContent += element.textContent[i];
-        await sleep(typingSpeed);
+      // Recursively type each child node
+      for (let child of Array.from(srcElem.childNodes)) {
+        await cloneAndType(child, newElem);
       }
     }
+  };
 
-    if (element.children.length != 0) {
-      console.log("TYPEWRITE: traversing nested element of type %s", tag);
-      const children = Array.from(element.children);
-      for (let i = 0; i < children.length; i++) {
-        await typewrite(emptyElement, children[i]);
-      }
+  // Clear the target element before starting
+  target.innerHTML = "";
+
+  // Start async typing
+  (async () => {
+    for (let child of Array.from(source.childNodes)) {
+      await cloneAndType(child, target);
     }
-  }
-};
-
-document.addEventListener("DOMContentLoaded", async function () {
-  const container = document.querySelector(".typewriter");
-  await typewrite(null, container);
-});
+  })();
+}

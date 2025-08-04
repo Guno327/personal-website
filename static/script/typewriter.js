@@ -34,99 +34,77 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _this = this;
-var typingSpeed = 5; // ms per character
-// Sleep function
-var sleep = function (ms) { return new Promise(function (r) { return setTimeout(r, ms); }); };
-// Main recursive work function
-var typewrite = function (parent, element) { return __awaiter(_this, void 0, void 0, function () {
-    var tag, emptyElement, children, i, i, children, i;
-    var _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                if (element == null) {
-                    return [2 /*return*/];
-                }
-                tag = element.tagName;
-                emptyElement = document.createElement(tag);
-                if (tag == "A") {
-                    emptyElement.setAttribute("href", (_a = element.getAttribute("href")) !== null && _a !== void 0 ? _a : "");
-                }
-                if (!(parent == null)) return [3 /*break*/, 5];
-                console.log("TYPEWRITER: root element of type %s", tag);
-                element.replaceWith(emptyElement);
-                sleep(100);
-                children = Array.from(element.children);
-                i = 0;
-                _b.label = 1;
-            case 1:
-                if (!(i < children.length)) return [3 /*break*/, 4];
-                return [4 /*yield*/, typewrite(emptyElement, children[i])];
-            case 2:
-                _b.sent();
-                _b.label = 3;
-            case 3:
-                i++;
-                return [3 /*break*/, 1];
-            case 4: return [3 /*break*/, 15];
-            case 5:
-                if (!(element.textContent == null)) return [3 /*break*/, 6];
-                console.log("TYPEWRITER: appending non-typed element of type %s", tag);
-                parent.appendChild(element);
-                return [3 /*break*/, 11];
-            case 6:
-                if (!(tag == "UL" || (tag == "LI" && element.children.length != 0))) return [3 /*break*/, 7];
-                console.log("TYPEWRITE: nested element with text");
-                parent.appendChild(emptyElement);
-                return [3 /*break*/, 11];
-            case 7:
-                console.log("TYPEWRITE: typing element of type %s with text '%s'", tag, element.textContent);
-                parent.appendChild(emptyElement);
-                emptyElement.textContent = "";
-                i = 0;
-                _b.label = 8;
-            case 8:
-                if (!(i < element.textContent.length)) return [3 /*break*/, 11];
-                emptyElement.textContent += element.textContent[i];
-                return [4 /*yield*/, sleep(typingSpeed)];
-            case 9:
-                _b.sent();
-                _b.label = 10;
-            case 10:
-                i++;
-                return [3 /*break*/, 8];
-            case 11:
-                if (!(element.children.length != 0)) return [3 /*break*/, 15];
-                console.log("TYPEWRITE: traversing nested element of type %s", tag);
-                children = Array.from(element.children);
-                i = 0;
-                _b.label = 12;
-            case 12:
-                if (!(i < children.length)) return [3 /*break*/, 15];
-                return [4 /*yield*/, typewrite(emptyElement, children[i])];
-            case 13:
-                _b.sent();
-                _b.label = 14;
-            case 14:
-                i++;
-                return [3 /*break*/, 12];
-            case 15: return [2 /*return*/];
-        }
-    });
-}); };
-document.addEventListener("DOMContentLoaded", function () {
-    return __awaiter(this, void 0, void 0, function () {
-        var container;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+function typeElement(source, target, delay) {
+    var _this = this;
+    var cloneAndType = function (srcNode, parent) { return __awaiter(_this, void 0, void 0, function () {
+        var text, _i, text_1, char, srcElem, newElem, _a, _b, attr, _c, _d, child;
+        return __generator(this, function (_e) {
+            switch (_e.label) {
                 case 0:
-                    container = document.querySelector(".typewriter");
-                    return [4 /*yield*/, typewrite(null, container)];
+                    if (!(srcNode.nodeType === Node.TEXT_NODE)) return [3 /*break*/, 5];
+                    text = srcNode.textContent || "";
+                    _i = 0, text_1 = text;
+                    _e.label = 1;
                 case 1:
-                    _a.sent();
-                    return [2 /*return*/];
+                    if (!(_i < text_1.length)) return [3 /*break*/, 4];
+                    char = text_1[_i];
+                    parent.appendChild(document.createTextNode(char));
+                    return [4 /*yield*/, new Promise(function (resolve) { return setTimeout(resolve, delay); })];
+                case 2:
+                    _e.sent();
+                    _e.label = 3;
+                case 3:
+                    _i++;
+                    return [3 /*break*/, 1];
+                case 4: return [3 /*break*/, 9];
+                case 5:
+                    if (!(srcNode.nodeType === Node.ELEMENT_NODE)) return [3 /*break*/, 9];
+                    srcElem = srcNode;
+                    newElem = document.createElement(srcElem.tagName.toLowerCase());
+                    // Copy all attributes
+                    for (_a = 0, _b = Array.from(srcElem.attributes); _a < _b.length; _a++) {
+                        attr = _b[_a];
+                        newElem.setAttribute(attr.name, attr.value);
+                    }
+                    parent.appendChild(newElem);
+                    _c = 0, _d = Array.from(srcElem.childNodes);
+                    _e.label = 6;
+                case 6:
+                    if (!(_c < _d.length)) return [3 /*break*/, 9];
+                    child = _d[_c];
+                    return [4 /*yield*/, cloneAndType(child, newElem)];
+                case 7:
+                    _e.sent();
+                    _e.label = 8;
+                case 8:
+                    _c++;
+                    return [3 /*break*/, 6];
+                case 9: return [2 /*return*/];
             }
         });
-    });
-});
+    }); };
+    // Clear the target element before starting
+    target.innerHTML = "";
+    // Start async typing
+    (function () { return __awaiter(_this, void 0, void 0, function () {
+        var _i, _a, child;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _i = 0, _a = Array.from(source.childNodes);
+                    _b.label = 1;
+                case 1:
+                    if (!(_i < _a.length)) return [3 /*break*/, 4];
+                    child = _a[_i];
+                    return [4 /*yield*/, cloneAndType(child, target)];
+                case 2:
+                    _b.sent();
+                    _b.label = 3;
+                case 3:
+                    _i++;
+                    return [3 /*break*/, 1];
+                case 4: return [2 /*return*/];
+            }
+        });
+    }); })();
+}

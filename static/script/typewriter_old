@@ -1,0 +1,47 @@
+const typingSpeed = 5; // ms per character
+
+// Sleep function
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+// Main recursive work function
+const typewrite = async (parent: Element | null, element: Element | null) => {
+  if (element == null) {
+    return;
+  }
+
+  const tag = element.tagName;
+  const emptyElement = document.createElement(tag);
+
+  if (tag == "A") {
+    emptyElement.setAttribute("href", element.getAttribute("href") ?? "");
+  }
+
+  if (parent == null) {
+    console.log("TYPEWRITER: root element of type %s", tag);
+
+    element.replaceWith(emptyElement);
+    sleep(100);
+    const children = Array.from(element.children);
+    for (let i = 0; i < children.length; i++) {
+      await typewrite(emptyElement, children[i]);
+    }
+  } else if (element.children.length != 0) {
+    parent.appendChild(emptyElement);
+    const children = Array.from(element.children);
+    for (let i = 0; i < children.length; i++) {
+      await typewrite(emptyElement, children[i]);
+    }
+  } else if (element.textContent != null) {
+    parent.appendChild(emptyElement);
+    emptyElement.textContent = "";
+    for (let i = 0; i < element.textContent.length; i++) {
+      emptyElement.textContent += element.textContent[i];
+      await sleep(typingSpeed);
+    }
+  } else {
+    parent.append(element);
+  }
+};
+
+const container = document.querySelector(".typewriter");
+typewrite(null, container);

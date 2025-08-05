@@ -214,3 +214,8 @@ code {
   background-color: var(--text);
   font-style: italic;
 }
+
+/* Images */
+img {
+  max-width: 100%;
+}

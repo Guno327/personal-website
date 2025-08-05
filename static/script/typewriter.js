@@ -34,6 +34,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var keyPressedSinceLoad = false;
+// Listen for the first keydown event
+document.addEventListener("keydown", function onKeydown() {
+    keyPressedSinceLoad = true;
+    // Optional: Remove the listener after first keypress to save resources
+    document.removeEventListener("keydown", onKeydown);
+});
 function typeElement(source, target, delay) {
     var _this = this;
     var cloneAndType = function (srcNode, parent) { return __awaiter(_this, void 0, void 0, function () {
@@ -48,6 +55,9 @@ function typeElement(source, target, delay) {
                 case 1:
                     if (!(_i < text_1.length)) return [3 /*break*/, 4];
                     char = text_1[_i];
+                    if (keyPressedSinceLoad) {
+                        return [2 /*return*/];
+                    }
                     parent.appendChild(document.createTextNode(char));
                     return [4 /*yield*/, new Promise(function (resolve) { return setTimeout(resolve, delay); })];
                 case 2:
@@ -96,6 +106,11 @@ function typeElement(source, target, delay) {
                 case 1:
                     if (!(_i < _a.length)) return [3 /*break*/, 4];
                     child = _a[_i];
+                    if (keyPressedSinceLoad) {
+                        source.style.visibility = "visible";
+                        target.replaceWith(source);
+                        return [2 /*return*/];
+                    }
                     return [4 /*yield*/, cloneAndType(child, target)];
                 case 2:
                     _b.sent();

@@ -6,7 +6,7 @@ COPY . .
 RUN apk update
 RUN apk add make go ts
 
-RUN make build
+RUN go build website.go
 
 EXPOSE 8080
 CMD ["/app/website"]

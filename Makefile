@@ -1,14 +1,15 @@
-build: website static/script/typewriter.js
+build: static/script/typewriter.js
+	sudo docker build --tag personal-website:latest --file Dockerfile .
 
-run: website static/script/typewriter.js
-	./website
+run: build
+	sudo docker run -p 8080:8080 personal-website
 
 static/script/typewriter.js: static/script/typewriter.ts
 	tsc --lib dom,es2015 static/script/typewriter.ts
-
-website: website.go
-	go build website.go
+	
 
 clean:
-	rm -f website
 	rm -f static/script/typewriter.js
+	rm -f website
+
+

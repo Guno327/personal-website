@@ -1,0 +1,4 @@
+website
+shell.nix
+.direnv/*
+.envrc

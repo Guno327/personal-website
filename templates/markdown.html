@@ -14,6 +14,19 @@
 </head>
 <body>
   <nav>
+    <a class="back" href="javascript:backClick()">Go Back</button>
+    <script>
+    function backClick() {
+        // Check if the referrer is from the same domain
+        if (document.referrer && document.referrer.indexOf('about.ghov.net') >= 0) {
+            history.go(-1);
+        } else {
+            // If not from the same domain, go to the homepage
+            window.location.href = '/';
+        }
+        return false;
+    }
+    </script>
     <ul>
       <li><a href="/" class="glitch" data-text="About Me">About Me</a></li>
       <li><a href="/classes/" class="glitch" data-text="Classes">Classes</a></li>

@@ -2,6 +2,15 @@
 
 ## EMAIL
 
-Bussiness Contact: [work@ghov.net](mailto:work@ghov.net)\
-Educational Contact: [school@ghov.net](mailto:school@ghov.net)\
-Personal Contact: [gunnarhovik@ghov.net](mailto:gunnarhovik@ghov.net)
+- Bussiness Contact: [work@ghov.net](mailto:work@ghov.net)
+- Educational Contact: [school@ghov.net](mailto:school@ghov.net)
+- Personal Contact: [gunnarhovik@ghov.net](mailto:gunnarhovik@ghov.net)
+
+## Links
+
+- [GitHub](https://github.com/guno327)
+- [LinkedIn](https://www.linkedin.com/in/gunnar-hovik-710326253/)
+
+## Socials
+
+- Discord: guno327

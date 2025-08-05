@@ -8,3 +8,7 @@ static/script/typewriter.js: static/script/typewriter.ts
 
 website: website.go
 	go build website.go
+
+clean:
+	rm -f website
+	rm -f static/script/typewriter.js

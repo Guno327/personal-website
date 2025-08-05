@@ -10,7 +10,10 @@ import (
 	"strings"
 )
 
-var templates = template.Must(template.ParseFiles("templates/base.html", "templates/markdown.html"))
+var templates = template.Must(template.ParseFiles(
+	"templates/base.html",
+	"templates/markdown.html",
+))
 
 var validPage = regexp.MustCompile("^/(class|project)/([a-zA-Z0-9_/]+)/$")
 var validStaticPage = regexp.MustCompile("^/(about|contact)/$")

@@ -2,7 +2,17 @@
 
 ## Description
 
-## Stack
+My personal server that I run and maintain to host a multitude of web/game
+servers as well as sandbox and develop projects.
+
+## Languages
+
+- Nixlang
+- Python
+- HTML
+- CSS
+- Bash/Sh scripts
+- Systemd config
 
 ## Write-up
 

@@ -47,7 +47,7 @@ func pageHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	log.Printf("FETCHING: %s", m[1])
+	log.Printf("FETCHING: %s", r.URL.Path)
 	var p *Page
 	switch m[1] {
 	case "class":
